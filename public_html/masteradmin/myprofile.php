@@ -1,37 +1,27 @@
-<?php
-ob_start();
+<?php 
 session_start();
-include("db.php");
-include("functions.php");
-$randsess = $_SESSION["HTTP_USER_AGENT"];
-$randstr = md5("WDSRRR".$_SERVER['HTTP_USER_AGENT']);
-if ($_SESSION['ride4pride_uname']=="" || $randsess!=$randstr)
-{
-	header("location: admin.php");
-}
-function checkEmail($email)
-{
-	$result = TRUE;
-    if(!eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email))
-    {
-		$result = FALSE;
-	}
-    return $result;
-}
+include $_SERVER['DOCUMENT_ROOT']."/includes/php_header.php";
+$msg='';
+// Display LoggedIn Admin Information
+$user = $u->getUserbyId($_SESSION['user_id']);
+$user_type = $u->getUserType();
 
-$squery="select * from tbl_admin";
-$query = mysqli_query($con,$squery);
-$result = mysqli_fetch_array($query);
-$email_address = stripslashes($result["email"]);
-$username = stripslashes($result["username"]);
-$type = stripslashes($result["type"]);
-$status = stripslashes($result["status"]);
-$date_added = stripslashes($result["date_added"]);
+//if(!isset($_SESSION['user_id']))
+//{
+//	header("Location:admin.php");
+//}
+if($_POST['Submit'] == "Publish")
+{
+		if($u->updateMyProfile($_POST))
+		{
+			$msg = "<span class=\"message\">Profile Updated Successfully.</span>";
+		}else{
+			$msg = "<span class=\"error\">Unable to Update Profile.</span>";
+		}
+}
 
 ?>
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
 <html lang="en">
 <!--<![endif]-->
@@ -44,19 +34,24 @@ $date_added = stripslashes($result["date_added"]);
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta content="" name="description"/>
 <meta content="" name="author"/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  	$('#Submit').click(function(event){
+	 	    if($('#password').val() != $('#conpassword').val()) {
+            alert("Password and Confirm Password don't match");
+            // Prevent form submission
+            event.preventDefault();
+        }
+	});
+});
+</script>
+
 <?php include('top.php');?>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
-<!-- DOC: Apply "page-header-fixed-mobile" and "page-footer-fixed-mobile" class to body element to force fixed header or footer in mobile devices -->
-<!-- DOC: Apply "page-sidebar-closed" class to the body and "page-sidebar-menu-closed" class to the sidebar menu element to hide the sidebar by default -->
-<!-- DOC: Apply "page-sidebar-hide" class to the body to make the sidebar completely hidden on toggle -->
-<!-- DOC: Apply "page-sidebar-closed-hide-logo" class to the body element to make the logo hidden on sidebar toggle -->
-<!-- DOC: Apply "page-sidebar-hide" class to body element to completely hide the sidebar on sidebar toggle -->
-<!-- DOC: Apply "page-sidebar-fixed" class to have fixed sidebar -->
-<!-- DOC: Apply "page-footer-fixed" class to the body element to have fixed footer -->
-<!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
-<!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
 <body class="page-header-fixed page-sidebar-closed-hide-logo">
 <?php include("header.php");?>
 <div class="clearfix">
@@ -81,59 +76,104 @@ $date_added = stripslashes($result["date_added"]);
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
-			
+                        <?php if($msg!=''){ ?>
+			<div class="alert alert-danger alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+				<?php echo $msg;?>
+			</div>
+                        <?php } ?>
 			<div class="row">
+			<form action="myprofile.php" method="post" id="myprofileform">
 				<div class="col-md-12">
+				
 					<!-- BEGIN EXTRAS PORTLET-->
 					<div class="portlet box green">
 						<div class="portlet-title">
-										
+							<div class="caption">
+                                                            <i class="icon-doc"></i> Profile 
+							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<form action="#" class="form-horizontal form-bordered" method="post" id="emailtemplateform">	
+							<div class="form-horizontal form-bordered">	
 								<div class="form-body">
+								
+								
+								
 									<div class="form-group">
-										<label class="control-label col-md-2">Username</label>
-										<div class="control-label col-md-1">
-											<?php echo $username;?>
+										<label class="control-label col-md-2">Name <span class="require"> * </span></label>
+										<div class="col-md-10">
+                                                                                    <input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $user['name']; ?>" required>
 										</div>
-									</div>								
+									</div>
+
+											<div class="form-group">
+												<label class="control-label col-md-2">User Type <span class="require"> * </span> </label>
+												<div class="col-md-10">
+  <input type="text" id="usertype" name="usertype" class="form-control" placeholder="UserType" value="<?php echo $user_type; ?>" disabled>
+												</div>
+											</div>
+
+
+
 									<div class="form-group">
-										<label class="control-label col-md-2">Email Address</label>
-										<div class="control-label col-md-1">
-											<?php echo $email_address;?>
+										<label class="control-label col-md-2">Email <span class="require"> * </span> </label>
+										<div class="col-md-10">
+                                                                                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="<?php echo $user['email']; ?>" disabled>
+										</div>
+									</div>										
+																		
+
+											
+									<div class="form-group">
+										<label class="control-label col-md-2">UserName <span class="require"> * </span></label>
+										<div class="col-md-10">
+                                                                                    <input type="text" id="username" name="username" class="form-control" placeholder="UserName" value="<?php echo $user['username']; ?>" disabled>
+										</div>
+									</div>									
+								
+									<div class="form-group">
+										<label class="control-label col-md-2">Password <span class="require"> * </span></label>
+										<div class="col-md-10">
+											<input type="password" id="password" name="password" class="form-control" placeholder="Password" value="" required>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-2">User Type</label>
-										<div class="control-label col-md-1">
-											<?php echo $type;?>
+										<label class="control-label col-md-2">Confirm Password <span class="require"> * </span></label>
+										<div class="col-md-10">
+											<input type="password" id="conpassword" name="conpassword" class="form-control" placeholder="Confirm Password" value="" required>
 										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-2">Status</label>
-										<div class="control-label col-md-1">
-											<?php echo $status;?>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-2">Date of Joined</label>
-										<div class="control-label col-md-1">
-											<?php echo date("d/m/Y",strtotime($date_added));?>
-										</div>
-									</div>
+									</div>																	
+
 								</div>
 
-							</form>
+							</div>
 							<!-- END FORM-->
 						</div>
-					
-						
 					</div>
 					<!-- END EXTRAS PORTLET-->
 					
+									<div class="form-actions">
+											<div class="row">
+												<div class="col-md-offset-2 col-md-10">
+												
+													<button type="submit" class="btn green" id="Submit"><i class="fa fa-check"></i> Publish</button>
+													<input type="hidden" name="Submit"  value="Publish" id="Submit">
+													<button type="button" id="back-btn" class="btn btn-default" onclick="window.location.href='all_charities.php'">Back</button> 
+													
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- END FORM-->
+								</div>
+							</div>
+							<!-- END EXTRAS PORTLET-->
+						</div>
+					</div>
+					<!-- END PAGE CONTENT-->
 		</div>
+		</form>
 	</div>
 	<!-- END CONTENT -->
 </div>
@@ -192,3 +232,16 @@ jQuery(document).ready(function() {
 </body>
 <!-- END BODY -->
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

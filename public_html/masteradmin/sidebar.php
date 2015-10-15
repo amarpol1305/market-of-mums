@@ -56,6 +56,24 @@
 						</li>
 					</ul>
 				</li>
+                                
+                                <li class="<?php #echo $languageopen;?>">
+					<a href="#">
+					<i class="icon-doc"></i>
+					<span class="title">Orders</span>
+					<span class="arrow "></span>
+					</a>
+					<ul class="sub-menu" style="<?php #echo $languagedisplay;?>">
+						<li class="<?php #echo $alllanguageopen;?>">
+                                                    <a href="all_orders.php">
+							All Orders</a>
+						</li>
+<!--						<li class="<?php #echo $addlanguageopen;?>">
+							<a href="add_sub_category.php">
+							Add Sub Category</a>
+						</li>-->
+					</ul>
+				</li>
 
 
               <li class="<?php #echo $languageopen;?>">
@@ -94,6 +112,23 @@
 					</ul>
 				</li>
 				
+                                <li class="<?php #echo $languageopen;?>">
+					<a href="#">
+					<i class="icon-doc"></i>
+					<span class="title">Feedback</span>
+					<span class="arrow "></span>
+					</a>
+					<ul class="sub-menu" style="<?php #echo $languagedisplay;?>">
+						<li class="<?php #echo $alllanguageopen;?>">
+                                                    <a href="all_feedbacks.php">
+							All Feedbacks</a>
+						</li>
+<!--						<li class="<?php #echo $addlanguageopen;?>">
+                                                    <a href="add_member.php">
+							Add Member</a>
+						</li>-->
+					</ul>
+				</li>
            
 				
 

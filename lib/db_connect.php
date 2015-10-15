@@ -4,7 +4,7 @@
     */
 	$db = 'mums';
 	$db_host = 'localhost';
-	$db_pass = 'bharat';
+	$db_pass = '';
         $db_user = 'root';
 
     try{

@@ -1538,7 +1538,8 @@ function getCurrency() {
 //get all orders
 function getAllOrders($date){
         global $pdo;
-        $select = "select orders.order_date,orders.payable_amount,orders.status,orders.discount,orders.id as order_id,order_details.price, order_details.quantity,users.first_name as fname,users.last_name as lname,order_details.price as amount
+        $select = "select orders.order_date,orders.status,
+            orders.id as order_id,users.name as name,order_details.final_amount,order_details.total_amount
             from orders left join order_details on orders.id=order_details.order_id 
         left join users on orders.user_id=users.id";
         try{
@@ -1551,6 +1552,7 @@ function getAllOrders($date){
         return $orders;
         }
         catch(PDOException $e){
+            echo $e->getMessage();
                 $this->setError($e->getMessage());
                 return false;
         }
@@ -1737,5 +1739,32 @@ function getAdminusers() {
 		return true;
 	}
 
+        
+        function getfeedback() {
+        $select = "SELECT user_feedback.*,users.name FROM user_feedback LEFT JOIN users ON user_feedback.user_id = users.id";
+
+                global $pdo;
+                $res = $pdo->query($select);
+                $cat = array();
+		$cat =$res->fetchAll(PDO::FETCH_ASSOC);
+		return $cat;
+
+        }
+        
+        function getFeedbackdetails($id){
+	$select = "SELECT user_feedback.*,users.name,users.email FROM user_feedback LEFT JOIN users ON user_feedback.user_id = users.id WHERE user_feedback.id=$id";
+                global $pdo;
+                $res = $pdo->query($select);
+                $row = $res->fetch(PDO::FETCH_ASSOC);
+                return $row;
+}
+
+function sendEmailValidationCode(){
+	$user_details = $this->getUserDetails($this->user_id);
+	$template_vars = $user_details;
+	$template_vars['server'] = $_SERVER['HTTP_HOST'];
+	sendTemplateEmail($user_details['email'],$this->app_config['email_validation_subject_path'],$this->app_config['email_validation_path'],$template_vars);
+}
+        
 }//User class ends here
 ?>

@@ -955,5 +955,42 @@ public function updatecharity($data){
 	return true;
 }
 
+public function updateAdminComment($data){
+	global $pdo;
+	try{
+	    $stmt = "UPDATE user_feedback SET `admin_comment`=? WHERE id=?";
+        $stmt = $pdo->prepare($stmt);
+        $stmt->execute(array($data['comment'],$data['fid'])); 
+	}catch(PDOException $e){
+            echo $e->getMessage();
+		$this->setError($e->getMessage());
+		return false;
+	}
+	return true;
+}
+
+public function updateisread($arr){
+	global $pdo;
+	try{
+	    $stmt = "UPDATE user_feedback SET `isread`=? WHERE id=?";
+        $stmt = $pdo->prepare($stmt);
+        $stmt->execute(array($arr['isread'],$arr['fid'])); 
+	}catch(PDOException $e){
+            echo $e->getMessage();
+		$this->setError($e->getMessage());
+		return false;
+	}
+	return true;
+}
+
+ function updateMyProfile($data){
+        global $pdo;
+        $pwd = md5($data['password']);
+        $update = $pdo->prepare("UPDATE users SET `name`=?, `password`=? WHERE `id`=?");
+        $update->execute(array($data['name'], $pwd, $this->user_id));
+        return true;
+    }
+
+
 
 } // class ends here
