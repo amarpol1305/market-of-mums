@@ -90,6 +90,7 @@ function getError()
 	}
 
 public	function authenticate($username, $password){
+   
 		global $pdo;
 	try{
 		$select = $pdo->prepare("SELECT id FROM users WHERE username = ? AND Password = ? AND status = 1");
@@ -571,37 +572,46 @@ function getCategoryDetails($id){
                 $row = $res->fetch(PDO::FETCH_ASSOC);
                 return $row;
 }
-public function addUser($data){
 
-	//$b_date = date("d-m-Y", strtotime($data['birth_date']));
-	//	$b_date = date("Y-m-d", strtotime($data['birth_date']));
-	$pwd= md5($data['password']);
-//	$data['special_diet']='';
-		global $pdo;
-        try{
-	$stmt = "INSERT INTO users
-            (`name_title`,`first_name`,`last_name`, `email`, `password`,`mobile`,`address_1`,`city`,`state`, `country`, `delivery_address`,`delivery_city`,`delivery_state`,`delivery_country`,`user_type`,`delivery_contact`,`created_date`)
-            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,2,?,NOW())";
-	    $stmt = $pdo->prepare($stmt);
-            $stmt->execute(array($data['title'],$data['fname'],$data['lname'],$data['cemail'],$pwd,$data['contact'],$data['address1'],$data['city'],$data['state'],
-	    $data['country'],$data['saddress1'],$data['scity'],$data['sstate'],$data['scountry'],$data['scontact']));
-        }
-	
+
+public function addUser($data){
+    
+    
+ 
+    $pwd= md5($data['cpassword']);
+    global $pdo;
+    try{
+            $stmt = "INSERT INTO users
+            (`email`,`first_name`,`password`, `username`,`type`,
+            `creation_date`)
+            VALUES(?,?,?,?,1,NOW())";
+                $stmt = $pdo->prepare($stmt);
+            $stmt->execute(array($data['email'],$data['fname'],$pwd,
+                $data['username']));
+            $uid = $pdo->lastInsertId();
+            
+            return $uid;
+           
+    }
+     
         catch(PDOException $e){
+            echo $e->getMessage();
+            exit(0);
             // check if username already exists in the system
             //$this->setError($e->getCode());
             if($e->getCode() == 23000){
-		//echo "BAC error is=".$e->getMessage();
+        //echo "BAC error is=".$e->getMessage();
                 $this->setError('User Already registered with us try different Email');
             }
             else{
-		echo "error is=".$e->getMessage();
+        //echo "error is=".$e->getMessage();
                 $this->setError($e->getMessage());
+                echo $e->getMessage();
                 //$this->setError('user_not_created');
             }
-            return false;
+            
         }
-	return true;
+    return true;
 }
 
 function updateShoppingCart($get, $details){
@@ -1741,13 +1751,21 @@ function getAdminusers() {
 
         
         function getfeedback() {
-        $select = "SELECT user_feedback.*,users.name FROM user_feedback LEFT JOIN users ON user_feedback.user_id = users.id";
+            try {
+                
+                $select = "SELECT user_feedback.*,users.name FROM user_feedback LEFT JOIN users ON user_feedback.user_id = users.id";
 
                 global $pdo;
                 $res = $pdo->query($select);
                 $cat = array();
 		$cat =$res->fetchAll(PDO::FETCH_ASSOC);
 		return $cat;
+                
+            } catch (PDOException $e) {
+                
+                echo $e->getMessage();
+            }
+        
 
         }
         
@@ -1764,6 +1782,46 @@ function sendEmailValidationCode(){
 	$template_vars = $user_details;
 	$template_vars['server'] = $_SERVER['HTTP_HOST'];
 	sendTemplateEmail($user_details['email'],$this->app_config['email_validation_subject_path'],$this->app_config['email_validation_path'],$template_vars);
+}
+
+function generateRandomDigit($length = 10) {
+    $characters = '0123456789';
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $randomString;
+}
+
+
+
+// set validation codes to the 
+function setValidationCode($data){
+   
+    
+    
+    
+	$update=sprintf("UPDATE users SET email_valid_code='%s' WHERE id = '%s'",
+	mysql_real_escape_string($data['email_valid_code']),
+	mysql_real_escape_string($data['uid']));
+	if(!($res=mysql_query($update))){
+                $this->setError(mysql_error().$update);
+                return false;
+        }
+	return true;
+}
+
+function setvalidcode($email_valid_code,$uid){
+        global $pdo;
+	try{
+	$update = $pdo->prepare("UPDATE users SET `email_valid_code`= ? WHERE id= ?");
+        $update->execute(array($email_valid_code, $uid));
+	}catch(PDOException $e){
+            echo $e->getMessage();
+                $this->setError($e->getMessage());
+                return false;
+        }
+		return true;
 }
         
 }//User class ends here

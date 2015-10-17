@@ -187,7 +187,7 @@ Page Header
           .page-header.navbar .top-menu .navbar-nav > li.dropdown > .dropdown-toggle:focus {
             background: none; }
         .page-header.navbar .top-menu .navbar-nav > li.dropdown .dropdown-menu {
-          margin-top: 9px;
+          margin-top: -15px;
           -webkit-border-radius: 4px;
           -moz-border-radius: 4px;
           -ms-border-radius: 4px;
@@ -573,7 +573,7 @@ Page Header
       .page-header.navbar .top-menu .navbar-nav > li.dropdown-user .dropdown-toggle {
         padding: 25px 6px 18px 6px; }
         .page-header.navbar .top-menu .navbar-nav > li.dropdown-user .dropdown-toggle .username.username-hide-on-mobile {
-          display: none; }
+           color: #000!important}
         .page-header.navbar .top-menu .navbar-nav > li.dropdown-user .dropdown-toggle img {
           margin-left: 0; }
       .page-header.navbar .top-menu .navbar-nav > li.dropdown-language .dropdown-toggle {
