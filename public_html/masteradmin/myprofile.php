@@ -76,21 +76,12 @@ $(document).ready(function(){
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
-<<<<<<< HEAD
                         <?php if($msg!=''){ ?>
-=======
-<?php
-if($msg!=''){ ?>
->>>>>>> origin/master
 			<div class="alert alert-danger alert-dismissable">
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
 				<?php echo $msg;?>
 			</div>
-<<<<<<< HEAD
                         <?php } ?>
-=======
-<?php } ?>
->>>>>>> origin/master
 			<div class="row">
 			<form action="myprofile.php" method="post" id="myprofileform">
 				<div class="col-md-12">

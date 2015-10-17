@@ -1,17 +1,12 @@
 <?php
 //session_start();
 include $_SERVER['DOCUMENT_ROOT']."/includes/php_header.php"; 
-<<<<<<< HEAD
 echo  $msg='';
-=======
-$msg='';
->>>>>>> origin/master
 if($_POST['submit'] == 'Submit')
 {
 	if($u->authenticate($_POST['username'],$_POST['password']))
 	{
 		$_SESSION['user_id']=$u->user_id;
-<<<<<<< HEAD
                 
                 
 		//$m_profile=$u->user_profile;
@@ -20,12 +15,6 @@ if($_POST['submit'] == 'Submit')
 			$msg = "<span class=\"error\">You have logged in successfullly.</span>";
                         echo 'welcome';
                         exit(0);
-=======
-		//$m_profile=$u->user_profile;
-		if($u->isUser())
-		{  	
-			$msg = "<span class=\"error\">You have logged in successfullly.</span>";				
->>>>>>> origin/master
 			//header('Location:./signup.php');   
 		}else{
 			$msg = "<span class=\"error\">Sorry You are not Member User.</span>";				
@@ -47,13 +36,8 @@ if($_POST['submit'] == 'Submit')
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
-<<<<<<< HEAD
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 
-=======
-
-<script src="/js/angular.min.js"></script>
->>>>>>> origin/master
 <script>
 var app =  angular.module('loginapp', []);
 app.controller('validationCtrl', function($scope) 
@@ -66,7 +50,6 @@ app.controller('validationCtrl', function($scope)
 </head>
 <body>
 <?php if(!$msg==''){ echo $msg; }?>
-<<<<<<< HEAD
 <?php //include $_SERVER['DOCUMENT_ROOT']."/includes/user_navigation.php"; ?>
 <div class="container">
 	 <div class="input_form">
@@ -78,34 +61,13 @@ app.controller('validationCtrl', function($scope)
                         	<label>Username:</label>
                             <input name="username" id="username" type="text" ng-model="uname" required>
 								<span style="color:red" ng-show="login.username.$dirty&&login.username.$invalid">
-=======
-	
-
-<?php //include $_SERVER['DOCUMENT_ROOT']."/includes/user_navigation.php"; ?>
-
-<div class="container">
-	 <div class="input_form">
-             	<h2>Login</h2>
-                <form name="login" action="login.php" method="post" ng-app="loginapp" ng-controller="validationCtrl" ng-init="submitSwitch=false" novalidate>
-			
-                	<ul>
-                        <li>
-                        	<label>Username:</label>
-                            <input name="username" id="username" type="text" ng-model="uname" required >
-								<span style="color:red" ng-show="login.username.$dirty">
->>>>>>> origin/master
 							    	<span class="error" ng-show="login.username.$error.required">Required!</span>
     							</span>
 						</li>
                         <li>
                         	<label>Password:</label>
-<<<<<<< HEAD
                             <input name="password" id="password" type="password" ng-model="pass" maxlength="8" required >
 								<span style="color:red" ng-show="login.password.$dirty&&login.password.$invalid">
-=======
-                            <input name="password" id="password" type="password" ng-model="pass" required >
-								<span style="color:red" ng-show="login.password.$dirty">
->>>>>>> origin/master
 							    	<span class="error" ng-show="login.password.$error.required">Required!</span>
     							</span>
 						</li>
@@ -115,11 +77,7 @@ app.controller('validationCtrl', function($scope)
                             &nbsp;&nbsp;<input name="cancel" type="reset" value="Cancel" class="btn_cancel">
                     	</li>
 	
-<<<<<<< HEAD
 					
-=======
-					</ul>
->>>>>>> origin/master
 		
                </form>
      </div>
