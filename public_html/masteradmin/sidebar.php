@@ -76,7 +76,7 @@
 					</ul>
 				</li>
                                 
-                                <li class="<?php #echo $languageopen;?>">
+               <li class="<?php #echo $languageopen;?>">
 					<a href="#">
 					<i class="icon-doc"></i>
 					<span class="title">Members</span>
@@ -94,6 +94,21 @@
 					</ul>
 				</li>
 				
+               <li class="<?php #echo $languageopen;?>">
+					<a href="#">
+					<i class="icon-doc"></i>
+					<span class="title">UI Management</span>
+					<span class="arrow "></span>
+					</a>
+					<ul class="sub-menu" style="<?php #echo $languagedisplay;?>">
+						<li class="<?php #echo $alllanguageopen;?>">
+                            <a href="all_contents.php">All Content</a>
+						</li>
+						<li class="<?php #echo $addlanguageopen;?>">
+                            <a href="add_content.php">Add Content</a>
+						</li>
+					</ul>
+				</li>
            
 				
 
