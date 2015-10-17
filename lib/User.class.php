@@ -1268,22 +1268,24 @@ function getSubCat() {
 
         }
 
-
+// Function for:To get all records of table .Function return result set as array
 function getContent() {
 
-        $select = "SELECT * from content";
+        $select = "SELECT * from cms_content";
                 global $pdo;
                 $res = $pdo->query($select);
                 $status = array();
-                $row = $res->fetch(PDO::FETCH_ASSOC);
+				$row = $res->fetchAll(PDO::FETCH_ASSOC);
                 return $row;
 
         }
 
-// get content by id
-function getContentbyId($id){
 
- $select = "SELECT * from content WHERE id = '$id'";
+/* get content by id
+* function: Return single record of particular id
+*/
+function getContentbyId($id){
+ 				$select = "SELECT * from cms_content WHERE id = '$id'";
                 global $pdo;
                 $res = $pdo->query($select);
                 $status = array();
@@ -1527,7 +1529,7 @@ function getCurrency() {
 //check user 
 
         function isUser(){
-                if($this->user_type == 'User'){
+                if($this->user_type == 'Member'){
                         return true;
                 }
                 return false;
