@@ -452,17 +452,17 @@ public function removeUserfromid($id){
         return true;
 }
 
-// add new content
+// add new page content
 public function addContent($data){
         global $pdo;
         try{
-                $stmt = "INSERT INTO content (`title`,`desc`,`isactive`,`content`) VALUES (?,?,?,?)";
-                $stmt = $pdo->prepare($stmt);
-                $stmt->execute(array($data['title'],$data['description'],$data['status'],$data['content']));
+        	$stmt = "INSERT INTO cms_content(`page_name`,`page_title`,`content`,`is_active`,`is_deleted`) VALUES (?,?,?,?,?)";
+            $stmt = $pdo->prepare($stmt);
+            $stmt->execute(array($data['pagename'],$data['pagetitle'],$data['content'],$data['isactive'],0));
         }catch(PDOException $e){
-                echo $e->getMessage();
-                $this->setError($e->getMessage());
-                return false;
+            echo $e->getMessage();
+            $this->setError($e->getMessage());
+            return false;
         }
         return true;
 }
@@ -473,10 +473,9 @@ public function addContent($data){
 public function updateContent($data){
         global $pdo;
         try{
-                $stmt = "UPDATE content SET `title`=?,`isactive`=?,`content`=? WHERE `id` = ?";
+                $stmt = "UPDATE cms_content SET `page_name`=?,`page_title`=?,`content`=?,`is_active`=? WHERE `id` = ?";
                 $stmt = $pdo->prepare($stmt);
-                $stmt->execute(array($data['title'],$data['status'],$data['content'],$data['id']));
-
+                $status=$stmt->execute(array($data['pagename'],$data['pagetitle'],$data['content'],$data['isactive'],$data['id']));
         }catch(PDOException $e){
 
                 echo $e->getMessage();
@@ -485,11 +484,13 @@ public function updateContent($data){
         }
         return true;
 }
-
+/* 
+* function: delete record of selected id
+*/
 public function removeContent($id){
                 global $pdo;
         try{
-                $update = $pdo->prepare("DELETE FROM content WHERE `id` = ?");
+                $update = $pdo->prepare("DELETE FROM cms_content WHERE `id` = ?");
                 $update->execute(array($id));
         }
         catch(PDOException $e){
